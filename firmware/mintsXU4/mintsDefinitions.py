@@ -17,7 +17,10 @@ latestOn                  = False
 
 mqttOn                    = True
 credentialsFile           = 'mintsXU4/credentials/credentials.yaml'
-credentials               = yaml.load(open(credentialsFile))
+# Use safe_load to avoid security risks
+with open(credentialsFile, 'r') as file:
+    credentials = yaml.safe_load(file)
+
 
 # sensorInfo                = pd.read_csv('https://raw.githubusercontent.com/mi3nts/mqttSubscribersV2/main/lists/sensorIDs.csv')
 # portInfo                  = pd.read_csv('https://raw.githubusercontent.com/mi3nts/mqttSubscribersV2/main/lists/portIDs.csv')
@@ -40,30 +43,23 @@ modelFile                 = "mintsXU4/credentials/climateCorrectionModel.joblib"
 
 
 def findMacAddress():
-    macAddress= get_mac_address(interface="eth0")
-    if (macAddress!= None):
-        return macAddress.replace(":","")
-
-    macAddress= get_mac_address(interface="docker0")
-    if (macAddress!= None):
-        return macAddress.replace(":","")
-
-    macAddress= get_mac_address(interface="enp1s0")
-    if (macAddress!= None):
-        return macAddress.replace(":","")
-
+    # List of potential interfaces to check
+    interfaces = ["Ethernet", "Wi-Fi", "docker0", "eth0", "enp1s0", "en0", "en1", "en2", "wlan0"]
+    
+    for interface in interfaces:
+        macAddress = get_mac_address(interface=interface)
+        if macAddress is not None:
+            return macAddress.replace(":", "")
+    
     return "xxxxxxxx"
 
-macAddress                = findMacAddress()
+# Example usage
+if __name__ == "__main__":
+   
 
-print()
-print("----- MQTT Subscriber V2 -----")
-print(" ")
-print("Node Info:")
-print(nodeInfo)
-print(" ")
-print("Sensor Info:")
-print(sensorInfo)
-print(" ")
-print("Port Info:")
-print(portInfo)
+    print()
+    print("----- Custom MQTT Streams -----")
+    print 
+    
+    macAddress                = findMacAddress()
+    print(macAddress)
