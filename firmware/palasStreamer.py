@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     my_event_handler.on_modified = on_mod
     
-    path = "D:\\githubRepos\\palasDataStreamer\\mintsData\\"
+    # path = "D:\\githubRepos\\palasDataStreamer\\mintsData\\"
     go_recursively = True
     my_observer = Observer()
     my_observer.schedule(my_event_handler, path, recursive=go_recursively)
